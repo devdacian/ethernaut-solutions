@@ -1,0 +1,29 @@
+// test/CoinFlip.test.js
+
+// load dependencies
+const { expect } = require('chai');
+
+// import utils from test helpers
+const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
+
+// load compiled artifacts
+const CoinFlip = artifacts.require('CoinFlip');
+const CoinFlipAttack = artifacts.require('CoinFlipAttack');
+
+// start test block
+contract('CoinFlip', function ([ owner, other ]) {
+
+  beforeEach(async function () {
+    this.coinFlip       = await CoinFlip.new({ from: owner });
+    this.coinFlipAttack = await CoinFlipAttack.new(this.coinFlip.address, {from: other});
+    // check no wins at start
+    expect(await this.coinFlip.consecutiveWins()).to.be.bignumber.equal(BN('0'));
+  });
+
+  it('test attack: 10 consecutive wins', async function () {
+    for(let i=1; i<=10; i++){
+      await this.coinFlipAttack.attack();
+      expect(await this.coinFlip.consecutiveWins()).to.be.bignumber.equal(BN(i));
+    }
+  });
+});
