@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 
-// exercise code
+// exercise code updated for > 0.8.0 solc
 pragma solidity ^0.8.0;
 
 contract Telephone {
 
   address public owner;
 
-  constructor() public {
+  constructor() {
     owner = msg.sender;
   }
 
@@ -26,7 +26,7 @@ contract Telephone {
 contract TelephoneAttack {
    Telephone telephone;
 
-  constructor(address _telephone){
+  constructor(address _telephone) {
     telephone =  Telephone(_telephone);
   }
 
