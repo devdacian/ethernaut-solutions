@@ -24,9 +24,9 @@ contract Elevator {
 
 
 // solution used by unit test
-// Elevator creates a Building contract from the address msg.sender;
+// Elevator uses Building contract at address msg.sender;
 // hence the attack contract needs to implement Building.isLastFloor() to trick
-// Elevator
+// Elevator into calling its own contract implementation
 contract ElevatorAttack {
   Elevator elevator;
   uint private callCount;
