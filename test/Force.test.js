@@ -14,14 +14,14 @@ const ForceAttack = artifacts.require('ForceAttack');
 contract('Force', function ([ owner, other ]) {
 
   beforeEach(async function () {
-    this.force = await Force.new({ from: owner });
-    this.forceAttack = await ForceAttack.new(this.force.address, {from: other});
+    this.vulnContract   = await Force.new({ from: owner });
+    this.attackContract = await ForceAttack.new(this.vulnContract.address, {from: other});
     // check initial contract has no balance
-    expect(BN((await ethers.provider.getBalance(this.force.address)).toString())).to.be.bignumber.equal(BN('0'));
+    expect(BN((await ethers.provider.getBalance(this.vulnContract.address)).toString())).to.be.bignumber.equal(BN('0'));
   });
 
   it('test attack: force contract to receive funds via selfdestruct', async function () {
-    await this.forceAttack.attack({from: other, value: 1});
-    expect(BN((await ethers.provider.getBalance(this.force.address)).toString())).to.be.bignumber.equal(BN('1'));
+    await this.attackContract.attack({from: other, value: 1});
+    expect(BN((await ethers.provider.getBalance(this.vulnContract.address)).toString())).to.be.bignumber.equal(BN('1'));
   });
 });

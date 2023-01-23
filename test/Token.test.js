@@ -16,18 +16,18 @@ contract('Token', function ([ owner, other ]) {
   const initialUserAlloc = BN('20');
 
   beforeEach(async function () {
-    this.token = await Token.new(initialSupply ,{ from: owner });
-    this.tokenAttack = await TokenAttack.new(this.token.address, {from: other});
+    this.vulnContract   = await Token.new(initialSupply ,{ from: owner });
+    this.attackContract = await TokenAttack.new(this.vulnContract.address, {from: other});
     // check owner initially owns all tokens
-    expect(await this.token.balanceOf(owner)).to.be.bignumber.equal(initialSupply);
+    expect(await this.vulnContract.balanceOf(owner)).to.be.bignumber.equal(initialSupply);
     // transfer intial user allocated tokens to attack contract & check balances
-    await this.token.transfer(this.tokenAttack.address, initialUserAlloc, { from: owner });
-    expect(await this.token.balanceOf(owner)).to.be.bignumber.equal(BN(initialSupply-initialUserAlloc));
-    expect(await this.token.balanceOf(this.tokenAttack.address)).to.be.bignumber.equal(initialUserAlloc);
+    await this.vulnContract.transfer(this.attackContract.address, initialUserAlloc, { from: owner });
+    expect(await this.vulnContract.balanceOf(owner)).to.be.bignumber.equal(BN(initialSupply-initialUserAlloc));
+    expect(await this.vulnContract.balanceOf(this.attackContract.address)).to.be.bignumber.equal(initialUserAlloc);
   });
 
   it('test attack: steal all tokens from owner to other', async function () {
-    await this.tokenAttack.attack({from: other});
-    expect(await this.token.balanceOf(other)).to.be.bignumber.equal(BN(initialSupply));
+    await this.attackContract.attack({from: other});
+    expect(await this.vulnContract.balanceOf(other)).to.be.bignumber.equal(BN(initialSupply));
   });
 });

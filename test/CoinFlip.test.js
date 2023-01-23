@@ -14,16 +14,16 @@ const CoinFlipAttack = artifacts.require('CoinFlipAttack');
 contract('CoinFlip', function ([ owner, other ]) {
 
   beforeEach(async function () {
-    this.coinFlip       = await CoinFlip.new({ from: owner });
-    this.coinFlipAttack = await CoinFlipAttack.new(this.coinFlip.address, {from: other});
+    this.vulnContract   = await CoinFlip.new({ from: owner });
+    this.attackContract = await CoinFlipAttack.new(this.vulnContract.address, {from: other});
     // check no wins at start
-    expect(await this.coinFlip.consecutiveWins()).to.be.bignumber.equal(BN('0'));
+    expect(await this.vulnContract.consecutiveWins()).to.be.bignumber.equal(BN('0'));
   });
 
   it('test attack: 10 consecutive wins', async function () {
     for(let i=1; i<=10; i++){
-      await this.coinFlipAttack.attack();
-      expect(await this.coinFlip.consecutiveWins()).to.be.bignumber.equal(BN(i));
+      await this.attackContract.attack();
+      expect(await this.vulnContract.consecutiveWins()).to.be.bignumber.equal(BN(i));
     }
   });
 });

@@ -15,16 +15,16 @@ contract('Vault', function ([ owner, other ]) {
 
   beforeEach(async function () {
     const pwd = ethers.utils.formatBytes32String('password');
-    this.vault = await Vault.new(pwd, { from: owner });
-    this.vaultAttack = await VaultAttack.new(this.vault.address, {from: other});
+    this.vulnContract   = await Vault.new(pwd, { from: owner });
+    this.attackContract = await VaultAttack.new(this.vulnContract.address, {from: other});
     // check initial contract is locked
-    expect(await this.vault.locked()).to.be.true;
+    expect(await this.vulnContract.locked()).to.be.true;
   });
 
   it('test attack: use ethers-js to read password from storage slot to unlock vault', async function () {
-    const extractedPass = await ethers.provider.getStorageAt(this.vault.address, 1);
-    await this.vaultAttack.attack(extractedPass, {from: other});
+    const extractedPass = await ethers.provider.getStorageAt(this.vulnContract.address, 1);
+    await this.attackContract.attack(extractedPass, {from: other});
     // check contract is now unlocked
-    expect(await this.vault.locked()).to.be.false;
+    expect(await this.vulnContract.locked()).to.be.false;
   });
 });

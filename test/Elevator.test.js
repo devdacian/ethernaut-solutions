@@ -14,15 +14,15 @@ const ElevatorAttack = artifacts.require('ElevatorAttack');
 contract('Elevator', function ([ owner, other ]) {
 
   beforeEach(async function () {
-    this.elevator = await Elevator.new({ from: owner });
-    this.elevatorAttack = await ElevatorAttack.new(this.elevator.address, {from: other});
+    this.vulnContract   = await Elevator.new({ from: owner });
+    this.attackContract = await ElevatorAttack.new(this.vulnContract.address, {from: other});
     // check top initially false
-    expect(await this.elevator.top()).to.be.false;
+    expect(await this.vulnContract.top()).to.be.false;
   });
 
   it('test attack: use fake interface to mislead elevator & get to the top!', async function () {
-    await this.elevatorAttack.attack({from: other});
+    await this.attackContract.attack({from: other});
     // check we have reached the top!
-    expect(await this.elevator.top()).to.be.true;
+    expect(await this.vulnContract.top()).to.be.true;
   });
 });
