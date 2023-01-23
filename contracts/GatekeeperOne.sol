@@ -20,6 +20,7 @@ contract GatekeeperOne {
     _;
   }
 
+  // see attack contract
   modifier gateThree(bytes8 _gateKey) {
       require(uint32(uint64(_gateKey)) == uint16(uint64(_gateKey)), "GatekeeperOne: invalid gateThree part one");
       require(uint32(uint64(_gateKey)) != uint64(_gateKey), "GatekeeperOne: invalid gateThree part two");
@@ -34,7 +35,6 @@ contract GatekeeperOne {
 }
 
 // solution used by unit test
-// see https://solidity-by-example.org/hacks/phishing-with-tx-origin/
 contract GatekeeperOneAttack {
    GatekeeperOne vulnContract;
 

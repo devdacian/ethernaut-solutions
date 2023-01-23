@@ -21,12 +21,6 @@ contract('GatekeeperOne', function ([ owner, other ]) {
   });
 
   it('test attack: bypass 3 gates to set entrant to user address', async function () {
-    // bytes32 has 66 characters
-    // first two characters 0x then 64 characters for content (1 byte = 2 characters)
-    // vulnContract compares input vs bytes16 (first 32 characters)
-    // so slice the string by 2 (for "0x" prefix) + 32 (first 32 characters after prefix) = 34
-    //await this.attackContract.attack(extractedPass.slice(0, 34), {from: other});
-
     console.log("Brute forcing correct gas...");
     const MOD      = 8191;
     const gasToUse = 800000;
