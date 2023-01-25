@@ -33,10 +33,10 @@ contract DexTwo is Ownable {
 
   function getSwapAmount(address from, address to, uint amount) public view returns(uint){
     return((amount * IERC20(to).balanceOf(address(this)))/IERC20(from).balanceOf(address(this)));
-    // (amount * DEX.TO) / DEX.FROM = 10 (Dex starts with 10 of each token, we want to drain all)
+    // (amount * DEX.TO) / DEX.FROM = 100 (Dex starts with 100 of each token, we want to drain all)
     // swap x units of our dummy ERC20 for Y units of token 1 (and afterwards token 2)
-    // (x * 10) / y = 10
-    // 10x = 10y
+    // (x * 100) / y = 100
+    // 100x = 100y
     // x = y = 1
   }
 
