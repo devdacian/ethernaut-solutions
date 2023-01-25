@@ -1,10 +1,9 @@
 # ethernaut-solutions
-Solutions to OpenZeppelin's Ethernaut smart-contract programming challenges https://ethernaut.openzeppelin.com
+Solutions to OpenZeppelin's <a href="https://ethernaut.openzeppelin.com">Ethernaut</a> smart-contract programming challenges.
 
-Includes both live attack smart-contracts that can be deployed & used on testnet, as well as automated unit tests verifying the attacks work.
+Using <a href="https://hardhat.org/tutorial">Hardhat</a>, includes automated unit tests verifying the attacks work.
 
 To run:
 
-npm install
-
-npx hardhat test
+npm install<br>
+npx hardhat test<br>
